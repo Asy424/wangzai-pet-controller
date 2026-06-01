@@ -20,7 +20,12 @@ param(
 )
 
 if (-not $Python) {
-    $Python = "python"
+    $BundledPython = Join-Path $HOME ".cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+    if (Test-Path $BundledPython) {
+        $Python = $BundledPython
+    } else {
+        $Python = "python"
+    }
 }
 
 $Root = $PSScriptRoot

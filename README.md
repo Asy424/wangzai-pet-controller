@@ -52,7 +52,7 @@ Set a custom duration in milliseconds:
 .\wangzai.ps1 failed 3000
 ```
 
-If `python` is not on your PATH, set `WANGZAI_PYTHON` first:
+On Codex Desktop, `wangzai.ps1` will try to use the bundled Codex Python runtime automatically. If `python` is not on your PATH and no bundled runtime is available, set `WANGZAI_PYTHON` first:
 
 ```powershell
 $env:WANGZAI_PYTHON = "C:\Path\To\python.exe"
