@@ -56,6 +56,24 @@ Then choose an action by typing a number.
 
 The menu starts the floating pet automatically.
 
+## Mobile Web Version
+
+The `web/` folder contains a phone-friendly PWA version.
+
+After GitHub Pages is enabled, open:
+
+```text
+https://asy424.github.io/wangzai-pet-controller/web/
+```
+
+On mobile, tap an action button to play Wangzai:
+
+```text
+失败 / 跳跃 / 向左跑 / 向右跑 / 等待 / 审阅 / 挥手 / 工作中 / 待机
+```
+
+This web version includes its own `assets/spritesheet.webp`, so phones do not need Codex, Python, or the Windows exe.
+
 ## Use From PowerShell
 
 Start the floating pet:

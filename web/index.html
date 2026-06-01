@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f6d365" />
+    <title>Wangzai</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="stage" aria-label="Wangzai pet stage">
+        <canvas id="petCanvas" width="384" height="416" aria-label="Wangzai animation"></canvas>
+      </section>
+
+      <section class="controls" aria-label="动作">
+        <button class="action primary" data-state="failed">失败</button>
+        <button class="action" data-state="jumping">跳跃</button>
+        <button class="action" data-state="running-left">向左跑</button>
+        <button class="action" data-state="running-right">向右跑</button>
+        <button class="action" data-state="waiting">等待</button>
+        <button class="action" data-state="review">审阅</button>
+        <button class="action" data-state="waving">挥手</button>
+        <button class="action" data-state="running">工作中</button>
+        <button class="action" data-state="idle">待机</button>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

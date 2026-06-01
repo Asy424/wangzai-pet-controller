@@ -1,0 +1,103 @@
+:root {
+  color-scheme: light;
+  --bg: #f7ecd9;
+  --ink: #221f1a;
+  --muted: #6d6257;
+  --panel: #fff9ef;
+  --line: #ead8bf;
+  --accent: #e94f37;
+  --accent-ink: #fffdf9;
+  --button: #fffdf9;
+  --shadow: 0 18px 45px rgba(70, 45, 20, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 34rem),
+    linear-gradient(145deg, #f7ecd9, #f1d7b9);
+  color: var(--ink);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.app {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: minmax(18rem, 1fr) auto;
+  gap: 1rem;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  min-height: 18rem;
+}
+
+#petCanvas {
+  width: min(76vw, 18rem);
+  height: auto;
+  image-rendering: auto;
+  filter: drop-shadow(0 1.2rem 1.2rem rgba(80, 46, 21, 0.22));
+  touch-action: manipulation;
+}
+
+.controls {
+  width: min(100%, 36rem);
+  margin: 0 auto;
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.action {
+  min-height: 3.1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  background: var(--button);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 750;
+  letter-spacing: 0;
+  box-shadow: 0 0.35rem 0.75rem rgba(70, 45, 20, 0.08);
+}
+
+.action:active,
+.action.is-active {
+  transform: translateY(1px);
+  border-color: #d64a33;
+  background: #ffe4d9;
+}
+
+.action.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (max-width: 360px) {
+  .controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
