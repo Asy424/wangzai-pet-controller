@@ -6,8 +6,6 @@ It opens the installed Wangzai spritesheet in a floating desktop window and expo
 
 ## Prerequisites
 
-- Python 3.10 or newer
-- The Python package `Pillow`
 - Wangzai already installed as a Codex/Petdex pet
 
 The controller expects this file by default:
@@ -16,11 +14,40 @@ The controller expects this file by default:
 ~/.codex/pets/wangzai/spritesheet.webp
 ```
 
-Install dependencies:
+If you use `WangzaiMenu.exe`, you do not need to install Python or Pillow.
+
+If you use the source scripts, install dependencies:
 
 ```powershell
 pip install -r requirements.txt
 ```
+
+## Easiest Use
+
+Download `WangzaiMenu.exe` from this repository's release or `dist` folder, then double-click it.
+
+If you downloaded the source code instead, double-click:
+
+```text
+wangzai-menu.bat
+```
+
+Then choose an action by typing a number.
+
+```text
+1. failed
+2. jumping
+3. running-left
+4. running-right
+5. waiting
+6. review
+7. waving
+8. running
+9. idle
+0. exit
+```
+
+The menu starts the floating pet automatically.
 
 ## Use From PowerShell
 
