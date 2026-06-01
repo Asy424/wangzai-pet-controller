@@ -14,6 +14,13 @@ The controller expects this file by default:
 ~/.codex/pets/wangzai/spritesheet.webp
 ```
 
+If your Codex home is on another drive, set `CODEX_HOME` before launching:
+
+```powershell
+$env:CODEX_HOME = "D:\Your\CodexHome"
+.\dist\WangzaiMenu.exe
+```
+
 If you use `WangzaiMenu.exe`, you do not need to install Python or Pillow.
 
 If you use the source scripts, install dependencies:

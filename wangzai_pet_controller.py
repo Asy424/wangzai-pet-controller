@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import queue
 import threading
 import time
@@ -30,7 +31,8 @@ ROWS = {
 
 
 def default_spritesheet(pet_id: str) -> Path:
-    return Path.home() / ".codex" / "pets" / pet_id / "spritesheet.webp"
+    codex_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
+    return codex_home / "pets" / pet_id / "spritesheet.webp"
 
 
 def load_frames(spritesheet: Path) -> dict[str, list[Image.Image]]:
