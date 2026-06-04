@@ -31,8 +31,9 @@
   --radius-panel: 1.15rem;
 }
 
+/* System dark mode (when no manual override) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --bg: #1a1612;
     --bg2: #15120e;
     --glow: rgba(40, 32, 22, 0.9);
@@ -61,6 +62,68 @@
     --canvas-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.35);
     --noise-opacity: 0.06;
   }
+}
+
+/* Manual dark mode */
+:root.dark {
+  --bg: #1a1612;
+  --bg2: #15120e;
+  --glow: rgba(40, 32, 22, 0.9);
+  --ink: #ebe3d6;
+  --muted: #a89985;
+  --panel: rgba(38, 32, 24, 0.92);
+  --panel-solid: #26201a;
+  --line: #3d3428;
+  --accent: #ff6b4f;
+  --accent-ink: #fffdf9;
+  --accent-glow: rgba(255, 107, 79, 0.25);
+  --button: #2a2319;
+  --button-hover: #3d3225;
+  --fail-bg: #2d1f1c;
+  --fail-border: #6b3530;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 0.35rem 0.75rem rgba(0, 0, 0, 0.25);
+  --ground: #2a2218;
+  --ground-center: #3a3025;
+  --ground-mid: #2a2218;
+  --ground-edge: rgba(30, 24, 16, 0.3);
+  --ground-shadow: rgba(0, 0, 0, 0.2);
+  --ground-glow: rgba(58, 48, 37, 0.1);
+  --grass-tip: #5a7a3a;
+  --status-ink: #a89985;
+  --canvas-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.35);
+  --noise-opacity: 0.06;
+}
+
+/* Manual light mode (override system dark) */
+:root.light {
+  --bg: #f7ecd9;
+  --bg2: #f1d7b9;
+  --glow: rgba(255, 255, 255, 0.9);
+  --ink: #221f1a;
+  --muted: #6d6257;
+  --panel: rgba(255, 249, 239, 0.92);
+  --panel-solid: #fff9ef;
+  --line: #ead8bf;
+  --accent: #e94f37;
+  --accent-ink: #fffdf9;
+  --accent-glow: rgba(233, 79, 55, 0.2);
+  --button: #fffdf9;
+  --button-hover: #fff3e6;
+  --fail-bg: #fff0ed;
+  --fail-border: #f0b4ae;
+  --shadow: 0 18px 45px rgba(70, 45, 20, 0.18);
+  --shadow-sm: 0 0.35rem 0.75rem rgba(70, 45, 20, 0.08);
+  --ground: #d4bf9f;
+  --ground-center: #c4a97a;
+  --ground-mid: #d4bf9f;
+  --ground-edge: rgba(196, 169, 122, 0.3);
+  --ground-shadow: rgba(140, 110, 65, 0.12);
+  --ground-glow: rgba(196, 169, 122, 0.08);
+  --grass-tip: #8fae6b;
+  --status-ink: #8c7b68;
+  --canvas-shadow: 0 1rem 1.5rem rgba(80, 46, 21, 0.18);
+  --noise-opacity: 0.03;
 }
 
 * {
@@ -127,6 +190,71 @@ body::before {
   margin: 0 auto;
   position: relative;
   z-index: 1;
+}
+
+/* ── Theme toggle ──────────────────── */
+
+.theme-toggle {
+  position: fixed;
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: 0.75rem;
+  z-index: 100;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.08);
+  background: var(--button-hover);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle__icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--ink);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.theme-toggle__icon--sun {
+  display: block;
+}
+
+.theme-toggle__icon--moon {
+  display: none;
+}
+
+/* Manual dark: show moon */
+:root.dark .theme-toggle__icon--sun {
+  display: none;
+}
+
+:root.dark .theme-toggle__icon--moon {
+  display: block;
+}
+
+/* System dark (no manual override): show moon */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) .theme-toggle__icon--sun {
+    display: none;
+  }
+  :root:not(.light):not(.dark) .theme-toggle__icon--moon {
+    display: block;
+  }
 }
 
 /* ── Stage ─────────────────────────── */
@@ -271,130 +399,4 @@ body::before {
   letter-spacing: 0.02em;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
-  user-select: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.action::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, var(--accent-glow), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.action:hover {
-  background: var(--button-hover);
-  border-color: color-mix(in srgb, var(--line) 60%, var(--accent));
-}
-
-.action:active {
-  transform: scale(0.96) translateY(1px);
-  border-color: color-mix(in srgb, var(--line) 40%, var(--accent));
-  box-shadow: 0 0.1rem 0.3rem rgba(70, 45, 20, 0.06);
-}
-
-.action:active::after {
-  opacity: 1;
-}
-
-.action.is-active {
-  transform: scale(0.97);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--button) 80%, var(--accent));
-  box-shadow: var(--shadow-sm), 0 0 0 2px var(--accent-glow);
-  animation: pulseGlow 2.5s ease-in-out infinite;
-}
-
-.action.is-active::after {
-  opacity: 0.6;
-}
-
-/* ── Primary buttons ───────────────── */
-
-.action.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
-  font-weight: 800;
-}
-
-.action.primary:hover {
-  background: color-mix(in srgb, var(--accent) 85%, white);
-  border-color: color-mix(in srgb, var(--accent) 85%, white);
-}
-
-.action.primary:active {
-  transform: scale(0.96) translateY(1px);
-  background: color-mix(in srgb, var(--accent) 90%, black);
-  border-color: color-mix(in srgb, var(--accent) 90%, black);
-}
-
-.action.primary.is-active {
-  background: var(--accent);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-sm), 0 0 0 3px var(--accent-glow);
-  animation: pulseGlow 2.5s ease-in-out infinite;
-}
-
-/* ── Fail button ───────────────────── */
-
-.action--fail {
-  margin-top: 0.15rem;
-  background: var(--fail-bg);
-  border-color: var(--fail-border);
-  color: var(--accent);
-}
-
-.action--fail:hover {
-  background: color-mix(in srgb, var(--fail-bg) 80%, var(--accent));
-  border-color: var(--accent);
-}
-
-.action--fail:active {
-  transform: scale(0.96) translateY(1px);
-}
-
-.action--fail.is-active {
-  background: color-mix(in srgb, var(--fail-bg) 70%, var(--accent));
-  border-color: var(--accent);
-  color: var(--accent-ink);
-  box-shadow: var(--shadow-sm), 0 0 0 2px rgba(233, 79, 55, 0.15);
-}
-
-/* ── Reduced motion ────────────────── */
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ── Very small screens ────────────── */
-
-@media (max-width: 340px) {
-  .btn-group--secondary,
-  .btn-group--movement {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .action {
-    min-height: 2.8rem;
-    font-size: 0.82rem;
-  }
-
-  #petCanvas {
-    width: 65vw;
-  }
-}
+  -webkit-tap-highlight-color: tr
