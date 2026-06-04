@@ -28,6 +28,8 @@ const STATUS_LABELS = {
 
 const FADE_DURATION = 120;
 
+/* ── DOM ────────────────────────────── */
+
 const canvas = document.querySelector("#petCanvas");
 const context = canvas.getContext("2d");
 const statusLabel = document.querySelector("#statusLabel");
@@ -36,6 +38,8 @@ const buttons = Array.from(document.querySelectorAll(".action"));
 canvas.width = CELL_WIDTH * DISPLAY_SCALE;
 canvas.height = CELL_HEIGHT * DISPLAY_SCALE;
 context.imageSmoothingEnabled = true;
+
+/* ── Sprite engine ──────────────────── */
 
 function drawFrame(sheet, state, frame) {
   const config = STATES[state];
@@ -52,6 +56,8 @@ function drawFrame(sheet, state, frame) {
     canvas.height,
   );
 }
+
+/* ── Animation state ────────────────── */
 
 let currentState = "idle";
 let frame = 0;
@@ -80,6 +86,8 @@ function vibrate(pattern) {
     navigator.vibrate(pattern);
   }
 }
+
+/* ── Main loop (requestAnimationFrame) ── */
 
 function tick(now) {
   if (!running) return;
@@ -120,6 +128,8 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 
+/* ── State switching ────────────────── */
+
 function play(nextState) {
   if (nextState === currentState && !fading) return;
   vibrate(15);
@@ -159,38 +169,45 @@ if ("serviceWorker" in navigator) {
 /* ── Theme toggle ───────────────────── */
 
 (function initTheme() {
-  const root = document.documentElement;
-  const toggle = document.querySelector("#themeToggle");
+  var root = document.documentElement;
+  var toggle = document.getElementById("themeToggle");
   if (!toggle) return;
 
-  function getSystemTheme() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  function isDark() {
+    return root.classList.contains("dark");
   }
 
-  function applyTheme(theme) {
-    root.classList.remove("dark", "light");
-    root.classList.add(theme);
+  function setTheme(dark) {
+    if (dark) {
+      root.classList.add("dark");
+      toggle.setAttribute("aria-checked", "true");
+    } else {
+      root.classList.remove("dark");
+      toggle.setAttribute("aria-checked", "false");
+    }
+    try { localStorage.setItem("wangzai-theme", dark ? "dark" : "light"); } catch (e) {}
   }
 
-  const saved = localStorage.getItem("wangzai-theme");
-  if (saved) {
-    applyTheme(saved);
+  // Restore saved preference, default to light
+  var saved = null;
+  try { saved = localStorage.getItem("wangzai-theme"); } catch (e) {}
+  if (saved === "dark") {
+    setTheme(true);
+  } else if (saved === "light") {
+    setTheme(false);
+  }
+  // If no preference saved, default to light mode
+
+  function handleToggle() {
+    setTheme(!isDark());
+    vibrate(10);
   }
 
-  toggle.addEventListener("click", () => {
-    const current = root.classList.contains("dark")
-      ? "dark"
-      : root.classList.contains("light")
-        ? "light"
-        : getSystemTheme();
-    const next = current === "dark" ? "light" : "dark";
-    applyTheme(next);
-    localStorage.setItem("wangzai-theme", next);
-  });
-
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (!localStorage.getItem("wangzai-theme")) {
-      applyTheme(e.matches ? "dark" : "light");
+  toggle.addEventListener("click", handleToggle);
+  toggle.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleToggle();
     }
   });
 })();
