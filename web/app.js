@@ -28,8 +28,6 @@ const STATUS_LABELS = {
 
 const FADE_DURATION = 120;
 
-/* ── DOM ────────────────────────────── */
-
 const canvas = document.querySelector("#petCanvas");
 const context = canvas.getContext("2d");
 const statusLabel = document.querySelector("#statusLabel");
@@ -38,8 +36,6 @@ const buttons = Array.from(document.querySelectorAll(".action"));
 canvas.width = CELL_WIDTH * DISPLAY_SCALE;
 canvas.height = CELL_HEIGHT * DISPLAY_SCALE;
 context.imageSmoothingEnabled = true;
-
-/* ── Sprite engine ──────────────────── */
 
 function drawFrame(sheet, state, frame) {
   const config = STATES[state];
@@ -57,8 +53,6 @@ function drawFrame(sheet, state, frame) {
   );
 }
 
-/* ── Animation state ────────────────── */
-
 let currentState = "idle";
 let frame = 0;
 let elapsed = 0;
@@ -66,7 +60,7 @@ let lastTimestamp = 0;
 let running = false;
 let fading = false;
 let fadeAlpha = 1;
-let fadeDirection = 0; // -1 = out, 1 = in
+let fadeDirection = 0;
 let pendingState = null;
 
 function setActiveButton(state) {
@@ -87,68 +81,48 @@ function vibrate(pattern) {
   }
 }
 
-/* ── Main loop (requestAnimationFrame) ── */
-
 function tick(now) {
   if (!running) return;
-
   if (lastTimestamp === 0) lastTimestamp = now;
   const delta = now - lastTimestamp;
   lastTimestamp = now;
 
-  // Handle fade transition
   if (fading) {
     fadeAlpha += fadeDirection * (delta / FADE_DURATION);
-
     if (fadeDirection < 0 && fadeAlpha <= 0) {
-      // Fade-out complete — switch state
       fadeAlpha = 0;
       const nextState = pendingState;
       pendingState = null;
-
       currentState = nextState;
       frame = 0;
       elapsed = 0;
       setActiveButton(currentState);
       updateStatus(currentState);
-
-      // Start fade-in
       fadeDirection = 1;
     } else if (fadeDirection > 0 && fadeAlpha >= 1) {
-      // Fade-in complete
       fadeAlpha = 1;
       fading = false;
       canvas.classList.remove("is-transitioning");
     }
-
     context.globalAlpha = Math.max(0, Math.min(1, fadeAlpha));
     drawFrame(sheet, currentState, frame);
     context.globalAlpha = 1;
   } else {
-    // Normal animation tick
     const config = STATES[currentState];
     const frameDuration = config.durations[frame];
-
     elapsed += delta;
     if (elapsed >= frameDuration) {
       elapsed -= frameDuration;
       frame = (frame + 1) % config.durations.length;
     }
-
     drawFrame(sheet, currentState, frame);
   }
-
   requestAnimationFrame(tick);
 }
 
-/* ── State switching ────────────────── */
-
 function play(nextState) {
   if (nextState === currentState && !fading) return;
-
   vibrate(15);
-
-  // Start fade-out transition
   fading = true;
   fadeDirection = -1;
   pendingState = nextState;
@@ -168,8 +142,6 @@ function startAnimation() {
   requestAnimationFrame(tick);
 }
 
-/* ── Events ─────────────────────────── */
-
 buttons.forEach((button) => {
   button.addEventListener("click", () => play(button.dataset.state));
 });
@@ -183,3 +155,42 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   });
 }
+
+/* ── Theme toggle ───────────────────── */
+
+(function initTheme() {
+  const root = document.documentElement;
+  const toggle = document.querySelector("#themeToggle");
+  if (!toggle) return;
+
+  function getSystemTheme() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function applyTheme(theme) {
+    root.classList.remove("dark", "light");
+    root.classList.add(theme);
+  }
+
+  const saved = localStorage.getItem("wangzai-theme");
+  if (saved) {
+    applyTheme(saved);
+  }
+
+  toggle.addEventListener("click", () => {
+    const current = root.classList.contains("dark")
+      ? "dark"
+      : root.classList.contains("light")
+        ? "light"
+        : getSystemTheme();
+    const next = current === "dark" ? "light" : "dark";
+    applyTheme(next);
+    localStorage.setItem("wangzai-theme", next);
+  });
+
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    if (!localStorage.getItem("wangzai-theme")) {
+      applyTheme(e.matches ? "dark" : "light");
+    }
+  });
+})();
