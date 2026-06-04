@@ -1,10 +1,24 @@
 {
   "name": "Wangzai Pet",
   "short_name": "Wangzai",
+  "description": "旺仔宠物动画控制器",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7ecd9",
   "theme_color": "#f6d365",
   "orientation": "portrait",
-  "icons": []
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
 }

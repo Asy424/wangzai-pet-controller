@@ -4,26 +4,43 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f6d365" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
     <title>Wangzai</title>
     <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai:wght@400;700&display=swap" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="app">
       <section class="stage" aria-label="旺仔动画舞台">
-        <canvas id="petCanvas" width="384" height="416" aria-label="旺仔动画"></canvas>
+        <div class="canvas-wrap">
+          <canvas id="petCanvas" width="384" height="416" aria-label="旺仔动画"></canvas>
+        </div>
+        <div class="ground-scene" aria-hidden="true">
+          <div class="grass"></div>
+          <div class="ground"></div>
+        </div>
+        <p class="status" id="statusLabel" aria-live="polite">待机中</p>
       </section>
 
       <section class="controls" aria-label="动作">
-        <button class="action primary" data-state="failed">失败</button>
-        <button class="action" data-state="jumping">跳跃</button>
-        <button class="action" data-state="running-left">向左跑</button>
-        <button class="action" data-state="running-right">向右跑</button>
-        <button class="action" data-state="waiting">等待</button>
-        <button class="action" data-state="review">审阅</button>
-        <button class="action" data-state="waving">挥手</button>
-        <button class="action" data-state="running">工作中</button>
-        <button class="action" data-state="idle">待机</button>
+        <div class="btn-group btn-group--main">
+          <button class="action primary" data-state="idle">待机</button>
+          <button class="action primary" data-state="running">工作中</button>
+        </div>
+        <div class="btn-group btn-group--secondary">
+          <button class="action" data-state="waiting">等待</button>
+          <button class="action" data-state="review">审阅</button>
+          <button class="action" data-state="waving">挥手</button>
+        </div>
+        <div class="btn-group btn-group--movement">
+          <button class="action" data-state="jumping">跳跃</button>
+          <button class="action" data-state="running-left">向左跑</button>
+          <button class="action" data-state="running-right">向右跑</button>
+        </div>
+        <button class="action action--fail" data-state="failed">失败</button>
       </section>
     </main>
 
