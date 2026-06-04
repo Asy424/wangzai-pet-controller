@@ -126,7 +126,8 @@ body::before {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  animation: fadeIn 0.6s 0.3s ease-out both;
+  opacity: 1;
+  visibility: visible;
 }
 
 .theme-toggle__track {
